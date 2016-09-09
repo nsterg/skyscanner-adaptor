@@ -12,14 +12,42 @@
 	<artifactId>skyscanner-adaptor</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<skyscanner-adaptor-api.version>1.0.3-SNAPSHOT</skyscanner-adaptor-api.version>
+		<skyscanner-cheapest-quotes-api.version>1.0.2-SNAPSHOT</skyscanner-cheapest-quotes-api.version>
+
+	</properties>
+
 	<dependencies>
-	
+
 		<dependency>
 			<groupId>com.flymatcher</groupId>
 			<artifactId>skyscanner-adaptor-api</artifactId>
-			<version>1.0.0</version>
+			<version>${skyscanner-adaptor-api.version}</version>
 		</dependency>
-		
+		<dependency>
+			<groupId>com.flymatcher</groupId>
+			<artifactId>skyscanner-adaptor-api</artifactId>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+			<version>${skyscanner-adaptor-api.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.flymatcher</groupId>
+			<artifactId>skyscanner-cheapest-quotes-api</artifactId>
+			<version>${skyscanner-cheapest-quotes-api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.flymatcher</groupId>
+			<artifactId>skyscanner-cheapest-quotes-api</artifactId>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+			<version>${skyscanner-cheapest-quotes-api.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.ws</groupId>
 			<artifactId>spring-ws-core</artifactId>
@@ -61,20 +89,20 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
-		<scm>
+
+	<scm>
 		<connection>scm:git:git//github.com/nsterg/skyscanner-adaptor.git</connection>
 		<url>https://github.com/nsterg/skyscanner-adaptor</url>
 		<developerConnection>scm:git:git@github.com:nsterg/skyscanner-adaptor.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
-	
+
 	<repositories>
 		<repository>
 			<id>libs-release-local</id>
 			<url>file:///c:/dev/flymatcher/repo/release</url>
 		</repository>
-</repositories>
+	</repositories>
 
 	<distributionManagement>
 		<repository>
