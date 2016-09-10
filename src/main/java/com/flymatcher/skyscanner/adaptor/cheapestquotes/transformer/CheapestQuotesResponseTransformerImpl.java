@@ -11,7 +11,8 @@ import com.flymatcher.skyscanner.adaptor.api.InOutBoundLeg;
 import com.flymatcher.skyscanner.adaptor.api.SkyscannerCheapestQuotesResponse;
 import com.flymatcher.skyscanner.adaptor.api.SkyscannerQuote;
 import com.flymatcher.skyscanner.cheapestquotes.BrowseQuotesResponseAPIDto;
-import com.flymatcher.skyscanner.cheapestquotes.OutboundLeg;
+import com.flymatcher.skyscanner.cheapestquotes.SkyscannerLeg;
+import com.flymatcher.skyscanner.cheapestquotes.QuoteDto;
 import com.flymatcher.skyscanner.cheapestquotes.carrier.CarriersDto;
 import com.flymatcher.skyscanner.cheapestquotes.place.PlaceDto;
 
@@ -25,37 +26,34 @@ public class CheapestQuotesResponseTransformerImpl implements CheapestQuotesResp
     final List<SkyscannerQuote> quotes = new ArrayList<>();
 
     response.getQuotes().forEach(q -> {
-      final SkyscannerQuote quote = new SkyscannerQuote();
-      quote.setDirect(q.getDirect());
-      quote.setPrice(q.getMinPrice());
-
-      final InOutBoundLeg inboundLeg = new InOutBoundLeg();
-      // inboundLeg.setType(LegType.INBOUND);
-
-      final OutboundLeg inLeg = q.getInboundLeg();
-      inboundLeg.setDepartureDate(parse(inLeg.getDepartureDate()));
-      inboundLeg.setCarrier(carrierLookUp(response.getCarriers(), inLeg.getCarrierIds().get(0)));
-      inboundLeg.setOrigin(placeLookUp(response.getPlaces(), inLeg.getOriginId()));
-      inboundLeg.setDestination(placeLookUp(response.getPlaces(), inLeg.getDestinationId()));
-
-      quote.setInboundLeg(inboundLeg);
-
-      final InOutBoundLeg outboundLeg = new InOutBoundLeg();
-      // outboundLeg.setType(LegType.OUTBOUND);
-
-      final OutboundLeg outLeg = q.getOutboundLeg();
-      outboundLeg.setDepartureDate(parse(outLeg.getDepartureDate()));
-      outboundLeg.setCarrier(carrierLookUp(response.getCarriers(), outLeg.getCarrierIds().get(0)));
-      outboundLeg.setOrigin(placeLookUp(response.getPlaces(), outLeg.getOriginId()));
-      outboundLeg.setDestination(placeLookUp(response.getPlaces(), outLeg.getDestinationId()));
-
-      quote.setOutboundLeg(outboundLeg);
-
+      final SkyscannerQuote quote = createQuote(response, q);
       quotes.add(quote);
     });
 
     cheapestQuotesResponse.setQuotes(quotes);
     return cheapestQuotesResponse;
+  }
+
+  private SkyscannerQuote createQuote(final BrowseQuotesResponseAPIDto response, final QuoteDto q) {
+    final SkyscannerQuote quote = new SkyscannerQuote();
+    quote.setDirect(q.getDirect());
+    quote.setPrice(q.getMinPrice());
+
+    quote.setInboundLeg(createInOutBoundLeg(response, q.getInboundLeg()));
+    quote.setOutboundLeg(createInOutBoundLeg(response, q.getOutboundLeg()));
+    return quote;
+  }
+
+  private InOutBoundLeg createInOutBoundLeg(final BrowseQuotesResponseAPIDto response,
+      final SkyscannerLeg inoutLeg) {
+    final InOutBoundLeg inoutboundLeg = new InOutBoundLeg();
+
+    inoutboundLeg.setDepartureDate(parse(inoutLeg.getDepartureDate()));
+    inoutboundLeg
+        .setCarrier(carrierLookUp(response.getCarriers(), inoutLeg.getCarrierIds().get(0)));
+    inoutboundLeg.setOrigin(placeLookUp(response.getPlaces(), inoutLeg.getOriginId()));
+    inoutboundLeg.setDestination(placeLookUp(response.getPlaces(), inoutLeg.getDestinationId()));
+    return inoutboundLeg;
   }
 
   private String placeLookUp(final List<PlaceDto> places, final int placeId) {

@@ -4,7 +4,7 @@ import static com.flymatcher.skyscanner.adaptor.api.builders.InOutBoundLegBuilde
 import static com.flymatcher.skyscanner.adaptor.api.builders.SkyscannerCheapestQuotesResponseBuilder.aSkyscannerCheapestQuotesResponse;
 import static com.flymatcher.skyscanner.adaptor.api.builders.SkyscannerQuoteBuilder.aSkyscannerQuote;
 import static com.flymatcher.skyscanner.cheapestquotes.builders.BrowseQuotesResponseAPIDtoBuilder.aBrowseQuotesResponseAPIDto;
-import static com.flymatcher.skyscanner.cheapestquotes.builders.OutboundLegBuilder.aOutboundLeg;
+import static com.flymatcher.skyscanner.cheapestquotes.builders.SkyscannerLegBuilder.aSkyscannerLeg;
 import static com.flymatcher.skyscanner.cheapestquotes.builders.QuoteDtoBuilder.aQuoteDto;
 import static com.flymatcher.skyscanner.cheapestquotes.carrier.builders.CarriersDtoBuilder.aCarriersDto;
 import static com.flymatcher.skyscanner.cheapestquotes.currency.builders.CurrencyDtoBuilder.aCurrencyDto;
@@ -68,12 +68,12 @@ public class CheapestQuotesResponseTransformerTest {
     return aBrowseQuotesResponseAPIDto()
                     .withQuotes(aQuoteDto()
                                 .withDirect(true)
-                                .withInboundLeg(aOutboundLeg()
+                                .withInboundLeg(aSkyscannerLeg()
                                                 .withCarrierIds(asList(1050))
                                                 .withDepartureDate("2016-10-20T00:00:00")
                                                 .withDestinationId(40920)
                                                 .withOriginId(67652))
-                                .withOutboundLeg(aOutboundLeg()
+                                .withOutboundLeg(aSkyscannerLeg()
                                                 .withCarrierIds(asList(1050))
                                                 .withDepartureDate("2016-10-10T00:00:00")
                                                 .withDestinationId(67652)
@@ -83,12 +83,12 @@ public class CheapestQuotesResponseTransformerTest {
                                 .withQuoteId(1), 
                                 aQuoteDto()
                                 .withDirect(true)
-                                .withInboundLeg(aOutboundLeg()
+                                .withInboundLeg(aSkyscannerLeg()
                                                 .withCarrierIds(asList(1050))
                                                 .withDepartureDate("2016-10-20T00:00:00")
                                                 .withDestinationId(40920)
                                                 .withOriginId(44759))
-                                .withOutboundLeg(aOutboundLeg()
+                                .withOutboundLeg(aSkyscannerLeg()
                                                 .withCarrierIds(asList(1050))
                                                 .withDepartureDate("2016-10-10T00:00:00")
                                                 .withDestinationId(44759)
