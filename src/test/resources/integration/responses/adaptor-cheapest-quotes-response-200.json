@@ -1,0 +1,36 @@
+{
+  "quotes": [
+    {
+      "price": 62.0,
+      "direct": true,
+      "outboundLeg": {
+        "carrier": "easyJet",
+        "origin": "Athens International",
+        "destination": "Madrid",
+        "departureDate": "2016-10-10T00:00:00"
+      },
+      "inboundLeg": {
+        "carrier": "easyJet",
+        "origin": "Madrid",
+        "destination": "Athens International",
+        "departureDate": "2016-10-20T00:00:00"
+      }
+    },
+    {
+      "price": 72.0,
+      "direct": true,
+      "outboundLeg": {
+        "carrier": "easyJet",
+        "origin": "Athens International",
+        "destination": "Paris Charles de Gaulle",
+        "departureDate": "2016-10-10T00:00:00"
+      },
+      "inboundLeg": {
+        "carrier": "easyJet",
+        "origin": "Paris Charles de Gaulle",
+        "destination": "Athens International",
+        "departureDate": "2016-10-20T00:00:00"
+      }
+    }
+  ]
+}

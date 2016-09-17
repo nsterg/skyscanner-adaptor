@@ -1,6 +1,6 @@
 package com.flymatcher.skyscanner.adaptor.cheapestquotes.transformer;
 
-import static com.flymatcher.skyscanner.adaptor.api.builders.InOutBoundLegBuilder.aInOutBoundLeg;
+import static com.flymatcher.skyscanner.adaptor.api.builders.LegBuilder.aLeg;
 import static com.flymatcher.skyscanner.adaptor.api.builders.SkyscannerCheapestQuotesResponseBuilder.aSkyscannerCheapestQuotesResponse;
 import static com.flymatcher.skyscanner.adaptor.api.builders.SkyscannerQuoteBuilder.aSkyscannerQuote;
 import static com.flymatcher.skyscanner.cheapestquotes.builders.BrowseQuotesResponseAPIDtoBuilder.aBrowseQuotesResponseAPIDto;
@@ -17,7 +17,7 @@ import java.text.ParseException;
 import org.junit.Test;
 
 import com.flymatcher.skyscanner.adaptor.api.SkyscannerCheapestQuotesResponse;
-import com.flymatcher.skyscanner.adaptor.api.builders.InOutBoundLegBuilder;
+import com.flymatcher.skyscanner.adaptor.api.builders.LegBuilder;
 import com.flymatcher.skyscanner.cheapestquotes.BrowseQuotesResponseAPIDto;
 
 public class CheapestQuotesResponseTransformerTest {
@@ -53,13 +53,13 @@ public class CheapestQuotesResponseTransformerTest {
   }
 
 
-  private InOutBoundLegBuilder buildOutBoundLeg(final String destination) throws ParseException {
-    return aInOutBoundLeg().withCarrier(CARRIER).withOrigin(ORIGIN).withDestination(destination)
+  private LegBuilder buildOutBoundLeg(final String destination) throws ParseException {
+    return aLeg().withCarrier(CARRIER).withOrigin(ORIGIN).withDestination(destination)
         .withDepartureDate(OUT_BOUND_DATE);
   }
 
-  private InOutBoundLegBuilder buildInBoundLeg(final String destination) throws ParseException {
-    return aInOutBoundLeg().withCarrier(CARRIER).withOrigin(destination).withDestination(ORIGIN)
+  private LegBuilder buildInBoundLeg(final String destination) throws ParseException {
+    return aLeg().withCarrier(CARRIER).withOrigin(destination).withDestination(ORIGIN)
         .withDepartureDate(IN_BOUND_DATE);
   }
 

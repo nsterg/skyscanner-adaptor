@@ -1,9 +1,9 @@
 package com.flymatcher.skyscanner.adaptor.cheapestquotes.service;
 
-import com.flymatcher.skyscanner.adaptor.api.CheapestQuotesRequest;
 import com.flymatcher.skyscanner.adaptor.api.SkyscannerCheapestQuotesResponse;
+import com.flymatcher.skyscanner.adaptor.cheapestquotes.dto.CheapestQuotesRequest;
 
-public interface QuoteService {
+public interface CheapestQuotesService {
 
   SkyscannerCheapestQuotesResponse getSkyscannerCheapestQuotesResponse(
       CheapestQuotesRequest request);

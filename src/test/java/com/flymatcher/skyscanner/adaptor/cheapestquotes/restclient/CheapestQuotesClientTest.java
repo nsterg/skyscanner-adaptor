@@ -1,9 +1,9 @@
 package com.flymatcher.skyscanner.adaptor.cheapestquotes.restclient;
 
-import static com.flymatcher.skyscanner.adaptor.api.builders.CheapestQuotesRequestBuilder.aCheapestQuotesRequest;
+import static com.flymatcher.skyscanner.adaptor.cheapestquotes.dto.builders.CheapestQuotesRequestBuilder.aCheapestQuotesRequest;
 import static com.flymatcher.skyscanner.cheapestquotes.builders.BrowseQuotesResponseAPIDtoBuilder.aBrowseQuotesResponseAPIDto;
-import static com.flymatcher.skyscanner.cheapestquotes.builders.SkyscannerLegBuilder.aSkyscannerLeg;
 import static com.flymatcher.skyscanner.cheapestquotes.builders.QuoteDtoBuilder.aQuoteDto;
+import static com.flymatcher.skyscanner.cheapestquotes.builders.SkyscannerLegBuilder.aSkyscannerLeg;
 import static com.flymatcher.skyscanner.cheapestquotes.carrier.builders.CarriersDtoBuilder.aCarriersDto;
 import static com.flymatcher.skyscanner.cheapestquotes.currency.builders.CurrencyDtoBuilder.aCurrencyDto;
 import static com.flymatcher.skyscanner.cheapestquotes.place.builders.PlaceDtoBuilder.aPlaceDto;
@@ -28,19 +28,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import com.flymatcher.skyscanner.adaptor.api.CheapestQuotesRequest;
+import com.flymatcher.skyscanner.adaptor.cheapestquotes.dto.CheapestQuotesRequest;
 import com.flymatcher.skyscanner.adaptor.exception.SkyscannerBadRequestException;
 import com.flymatcher.skyscanner.adaptor.exception.SkyscannerServerException;
 import com.flymatcher.skyscanner.cheapestquotes.BrowseQuotesResponseAPIDto;
 
 public class CheapestQuotesClientTest {
 
-  private final String SKYSCANNER_CHEAPEST_QUOTES_BASE_URL = "base-url";
+  private static final String SKYSCANNER_CHEAPEST_QUOTES_BASE_URL = "base-url";
   private static final String CHEAPEST_QUOTES_PATH_URL =
-      "/[country]/[currency]/[locale]/[city]/anywhere/[outboundPartialDate]/[inboundPartialDate]";
+      "/GR/EUR/en-GB/ATH/anywhere/2016-10-10/2016-10-20";
 
-  private final String SKYSCANNER_API_KEY = "api-key";
-  private static final String ERROR_MESSAGE = "Could not get a valid scyscanner quote response.";
+  private static final String SKYSCANNER_API_KEY = "api-key";
+
+  private static final String CHEAPEST_QUOTES_URL = SKYSCANNER_CHEAPEST_QUOTES_BASE_URL
+      + CHEAPEST_QUOTES_PATH_URL + "?apiKey=" + SKYSCANNER_API_KEY;
+
+  private static final String ERROR_MESSAGE = "Could not get a valid skyscanner quote response.";
 
   private CheapestQuotesClient client;
 
@@ -66,11 +70,10 @@ public class CheapestQuotesClientTest {
         aCheapestQuotesRequest().withDefaultValues().build();
 
     final BrowseQuotesResponseAPIDto expected = createBrowseQuotesResponseAPIDto();
-    final String url = SKYSCANNER_CHEAPEST_QUOTES_BASE_URL + CHEAPEST_QUOTES_PATH_URL + "?apiKey="
-        + SKYSCANNER_API_KEY;
 
-    given(mockRestTemplate.exchange(buildUrl(cheapestQuotesRequest, url), GET, null,
-        BrowseQuotesResponseAPIDto.class)).willReturn(mockResponseEntity);
+    given(
+        mockRestTemplate.exchange(CHEAPEST_QUOTES_URL, GET, null, BrowseQuotesResponseAPIDto.class))
+            .willReturn(mockResponseEntity);
 
     given(mockResponseEntity.getBody()).willReturn(expected);
 
@@ -88,14 +91,11 @@ public class CheapestQuotesClientTest {
     final CheapestQuotesRequest cheapestQuotesRequest =
         aCheapestQuotesRequest().withDefaultValues().build();
 
-    final String url = SKYSCANNER_CHEAPEST_QUOTES_BASE_URL + CHEAPEST_QUOTES_PATH_URL + "?apiKey="
-        + SKYSCANNER_API_KEY;
-
     final String errorJson =
         "{\"ValidationErrors\": {\"ParameterName\": \"apikey\", \"Message\": \"ApiKey invalid\"}]}";
 
-    given(mockRestTemplate.exchange(buildUrl(cheapestQuotesRequest, url), GET, null,
-        BrowseQuotesResponseAPIDto.class))
+    given(
+        mockRestTemplate.exchange(CHEAPEST_QUOTES_URL, GET, null, BrowseQuotesResponseAPIDto.class))
             .willThrow(buildHttpStatusCodeException(BAD_REQUEST, errorJson));
 
     expectedException.expect(SkyscannerBadRequestException.class);
@@ -112,13 +112,10 @@ public class CheapestQuotesClientTest {
     final CheapestQuotesRequest cheapestQuotesRequest =
         aCheapestQuotesRequest().withDefaultValues().build();
 
-    final String url = SKYSCANNER_CHEAPEST_QUOTES_BASE_URL + CHEAPEST_QUOTES_PATH_URL + "?apiKey="
-        + SKYSCANNER_API_KEY;
-
     final String errorJson = "Something went terribly wrong";
 
-    given(mockRestTemplate.exchange(buildUrl(cheapestQuotesRequest, url), GET, null,
-        BrowseQuotesResponseAPIDto.class))
+    given(
+        mockRestTemplate.exchange(CHEAPEST_QUOTES_URL, GET, null, BrowseQuotesResponseAPIDto.class))
             .willThrow(buildHttpStatusCodeException(INTERNAL_SERVER_ERROR, errorJson));
 
     expectedException.expect(SkyscannerServerException.class);
@@ -190,19 +187,6 @@ public class CheapestQuotesClientTest {
                                       .withName("easyJet"))
                   .build();
     // @formatter:on
-  }
-
-  private String buildUrl(final CheapestQuotesRequest request, final String url) {
-    // @formatter:off
-    return url
-              .replaceAll("[country]", request.getCountry())
-              .replaceAll("[currency]", request.getCurrency())
-              .replaceAll("[city]", request.getCity())
-              .replaceAll("[locale]", request.getLocale())
-              .replaceAll("[outboundPartialDate]", request.getOutboundPartialDate().toString())
-              .replaceAll("[inboundPartialDate]", request.getInboundPartialDate().toString());
-    // @formatter:on
-
   }
 
 }

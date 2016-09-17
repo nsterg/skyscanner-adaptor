@@ -7,15 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.flymatcher.skyscanner.adaptor.api.InOutBoundLeg;
+import org.springframework.stereotype.Component;
+
+import com.flymatcher.skyscanner.adaptor.api.Leg;
 import com.flymatcher.skyscanner.adaptor.api.SkyscannerCheapestQuotesResponse;
 import com.flymatcher.skyscanner.adaptor.api.SkyscannerQuote;
 import com.flymatcher.skyscanner.cheapestquotes.BrowseQuotesResponseAPIDto;
-import com.flymatcher.skyscanner.cheapestquotes.SkyscannerLeg;
 import com.flymatcher.skyscanner.cheapestquotes.QuoteDto;
+import com.flymatcher.skyscanner.cheapestquotes.SkyscannerLeg;
 import com.flymatcher.skyscanner.cheapestquotes.carrier.CarriersDto;
 import com.flymatcher.skyscanner.cheapestquotes.place.PlaceDto;
 
+@Component
 public class CheapestQuotesResponseTransformerImpl implements CheapestQuotesResponseTransformer {
 
   @Override
@@ -44,17 +47,21 @@ public class CheapestQuotesResponseTransformerImpl implements CheapestQuotesResp
     return quote;
   }
 
-  private InOutBoundLeg createInOutBoundLeg(final BrowseQuotesResponseAPIDto response,
+  private Leg createInOutBoundLeg(final BrowseQuotesResponseAPIDto response,
       final SkyscannerLeg inoutLeg) {
-    final InOutBoundLeg inoutboundLeg = new InOutBoundLeg();
+    final Leg leg = new Leg();
 
-    inoutboundLeg.setDepartureDate(parse(inoutLeg.getDepartureDate()));
-    inoutboundLeg
-        .setCarrier(carrierLookUp(response.getCarriers(), inoutLeg.getCarrierIds().get(0)));
-    inoutboundLeg.setOrigin(placeLookUp(response.getPlaces(), inoutLeg.getOriginId()));
-    inoutboundLeg.setDestination(placeLookUp(response.getPlaces(), inoutLeg.getDestinationId()));
-    return inoutboundLeg;
+    leg.setDepartureDate(parse(inoutLeg.getDepartureDate()));
+
+    final List<Integer> carrierIds = inoutLeg.getCarrierIds();
+    if (carrierIds != null && !carrierIds.isEmpty()) {
+      leg.setCarrier(carrierLookUp(response.getCarriers(), carrierIds.get(0)));
+    }
+    leg.setOrigin(placeLookUp(response.getPlaces(), inoutLeg.getOriginId()));
+    leg.setDestination(placeLookUp(response.getPlaces(), inoutLeg.getDestinationId()));
+    return leg;
   }
+
 
   private String placeLookUp(final List<PlaceDto> places, final int placeId) {
     final Map<Integer, String> placesMap =

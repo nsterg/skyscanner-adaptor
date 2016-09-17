@@ -68,6 +68,18 @@
 			<scope>compile</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>19.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.sun.jersey</groupId>
+			<artifactId>jersey-client</artifactId>
+			<version>1.19.2</version>
+		</dependency>
+
 		<!-- TEST -->
 		<dependency>
 			<groupId>org.springframework.ws</groupId>
@@ -86,6 +98,12 @@
 			<groupId>com.jayway.restassured</groupId>
 			<artifactId>rest-assured</artifactId>
 			<version>2.8.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.rest-driver</groupId>
+			<artifactId>rest-client-driver</artifactId>
+			<version>1.1.39</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

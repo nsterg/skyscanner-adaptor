@@ -1,0 +1,98 @@
+{
+  "Quotes": [
+    {
+      "QuoteId": 1,
+      "MinPrice": 62,
+      "Direct": true,
+      "OutboundLeg": {
+        "CarrierIds": [
+          1050
+        ],
+        "OriginId": 40920,
+        "DestinationId": 67652,
+        "DepartureDate": "2016-10-10T00:00:00"
+      },
+      "InboundLeg": {
+        "CarrierIds": [
+          1050
+        ],
+        "OriginId": 67652,
+        "DestinationId": 40920,
+        "DepartureDate": "2016-10-20T00:00:00"
+      },
+      "QuoteDateTime": "2016-08-06T22:01:00"
+    },
+    {
+      "QuoteId": 2,
+      "MinPrice": 72,
+      "Direct": true,
+      "OutboundLeg": {
+        "CarrierIds": [
+          1050
+        ],
+        "OriginId": 40920,
+        "DestinationId": 44759,
+        "DepartureDate": "2016-10-10T00:00:00"
+      },
+      "InboundLeg": {
+        "CarrierIds": [
+          1050
+        ],
+        "OriginId": 44759,
+        "DestinationId": 40920,
+        "DepartureDate": "2016-10-20T00:00:00"
+      },
+      "QuoteDateTime": "2016-08-18T11:56:00"
+    }
+  ],
+  "Places": [
+    {
+      "PlaceId": 40920,
+      "IataCode": "Ath",
+      "Name": "Athens International",
+      "Type": "Station",
+      "SkyscannerCode": "ATH",
+      "CityName": "Athens",
+      "CityId": "ATHE",
+      "CountryName": "Greece"
+    },
+    {
+      "PlaceId": 67652,
+      "IataCode": "MAD",
+      "Name": "Madrid",
+      "Type": "Station",
+      "SkyscannerCode": "Mad",
+      "CityName": "Madrid",
+      "CityId": "MADRI",
+      "CountryName": "Spain"
+    },
+    {
+      "PlaceId": 44759,
+      "IataCode": "PAR",
+      "Name": "Paris Charles de Gaulle",
+      "Type": "Station",
+      "SkyscannerCode": "PAR",
+      "CityName": "Paris",
+      "CityId": "PARI",
+      "CountryName": "France"
+    }
+  ],
+  "Carriers": [
+    {
+      "CarrierId": 1050,
+      "Name": "easyJet"
+    }
+  ],
+  "Currencies": [
+    {
+      "Code": "GBP",
+      "Symbol": "GBP",
+      "ThousandsSeparator": ",",
+      "DecimalSeparator": ".",
+      "SymbolOnLeft": true,
+      "SpaceBetweenAmountAndSymbol": false,
+      "RoundingCoefficient": 0,
+      "DecimalDigits": 2
+    }
+  ]
+}
