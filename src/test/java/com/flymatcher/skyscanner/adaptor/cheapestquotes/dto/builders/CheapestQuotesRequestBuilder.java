@@ -9,8 +9,9 @@ import com.flymatcher.skyscanner.adaptor.cheapestquotes.dto.CheapestQuotesReques
 
 public class CheapestQuotesRequestBuilder {
 
-  private String country;
-  private String city;
+  private String market;
+  private String originCity;
+  private String destinationCountry;
   private String currency;
   private String locale;
   private LocalDate outboundPartialDate;
@@ -24,8 +25,9 @@ public class CheapestQuotesRequestBuilder {
 
   public CheapestQuotesRequest build() {
     final CheapestQuotesRequest cheapestQuotesRequest = new CheapestQuotesRequest();
-    cheapestQuotesRequest.setCity(city);
-    cheapestQuotesRequest.setCountry(country);
+    cheapestQuotesRequest.setOriginCity(originCity);
+    cheapestQuotesRequest.setDestinationCountry(destinationCountry);
+    cheapestQuotesRequest.setMarket(market);
     cheapestQuotesRequest.setCurrency(currency);
     cheapestQuotesRequest.setLocale(locale);
     cheapestQuotesRequest.setOutboundPartialDate(outboundPartialDate);
@@ -34,13 +36,18 @@ public class CheapestQuotesRequestBuilder {
     return cheapestQuotesRequest;
   }
 
-  public CheapestQuotesRequestBuilder withCountry(final String country) {
-    this.country = country;
+  public CheapestQuotesRequestBuilder withMarket(final String market) {
+    this.market = market;
     return this;
   }
 
-  public CheapestQuotesRequestBuilder withCity(final String city) {
-    this.city = city;
+  public CheapestQuotesRequestBuilder withOriginCity(final String city) {
+    this.originCity = city;
+    return this;
+  }
+
+  public CheapestQuotesRequestBuilder withDestinationCountry(final String destinationCountry) {
+    this.destinationCountry = destinationCountry;
     return this;
   }
 
@@ -75,8 +82,9 @@ public class CheapestQuotesRequestBuilder {
   }
 
   public CheapestQuotesRequestBuilder withDefaultValues() {
-    this.country = "GR";
-    this.city = "ATH";
+    this.market = "GR";
+    this.originCity = "ATH";
+    this.destinationCountry = "ESP";
     this.currency = "EUR";
     this.locale = "en-GB";
     this.outboundPartialDate = parse("2016-10-10");

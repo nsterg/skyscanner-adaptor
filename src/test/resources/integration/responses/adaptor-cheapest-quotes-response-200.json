@@ -3,6 +3,7 @@
     {
       "price": 62.0,
       "direct": true,
+      "quoteDate":"2016-08-06T22:01:00",
       "outboundLeg": {
         "carrier": "easyJet",
         "origin": "Athens International",
@@ -19,6 +20,7 @@
     {
       "price": 72.0,
       "direct": true,
+      "quoteDate":"2016-08-18T11:56:00",
       "outboundLeg": {
         "carrier": "easyJet",
         "origin": "Athens International",

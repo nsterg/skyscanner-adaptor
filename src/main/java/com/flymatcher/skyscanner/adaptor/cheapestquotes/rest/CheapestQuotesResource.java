@@ -26,19 +26,21 @@ public class CheapestQuotesResource {
   }
 
   @RequestMapping(
-      value = "/v1/cheapest-quotes/{country}/{city}/{currency}/{locale}/{outboundPartialDate}/{inboundPartialDate}",
+      value = "/v1/cheapest-quotes/{market}/{originCity}/{destinationCountry}/{currency}/{locale}/{outboundPartialDate}/{inboundPartialDate}",
       method = GET)
   // @formatter:off
   @ApiResponses(
       value = {@ApiResponse(code = 200, message = "Success", response = SkyscannerCheapestQuotesResponse.class)})
   // @formatter:on
-  public ResponseEntity<? extends Object> getCheapestQuotes(@PathVariable final String country,
-      @PathVariable final String city, @PathVariable final String currency,
-      @PathVariable final String locale, @PathVariable final String outboundPartialDate,
+  public ResponseEntity<? extends Object> getCheapestQuotes(@PathVariable final String market,
+      @PathVariable final String originCity, @PathVariable final String destinationCountry,
+      @PathVariable final String currency, @PathVariable final String locale,
+      @PathVariable final String outboundPartialDate,
       @PathVariable final String inboundPartialDate) {
 
-    final SkyscannerCheapestQuotesResponse response = service.getSkyscannerCheapestQuotesResponse(
-        valueOf(country, city, currency, locale, outboundPartialDate, inboundPartialDate));
+    final SkyscannerCheapestQuotesResponse response =
+        service.getSkyscannerCheapestQuotesResponse(valueOf(market, originCity, destinationCountry,
+            currency, locale, outboundPartialDate, inboundPartialDate));
     return new ResponseEntity<SkyscannerCheapestQuotesResponse>(response, OK);
 
   }

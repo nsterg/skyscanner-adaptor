@@ -2,15 +2,23 @@ package com.flymatcher.skyscanner.adaptor.cheapestquotes.restclient;
 
 import static javax.ws.rs.core.UriBuilder.fromPath;
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flymatcher.skyscanner.adaptor.cheapestquotes.dto.CheapestQuotesRequest;
 import com.flymatcher.skyscanner.adaptor.exception.SkyscannerBadRequestException;
 import com.flymatcher.skyscanner.adaptor.exception.SkyscannerServerException;
@@ -20,21 +28,25 @@ import com.flymatcher.skyscanner.cheapestquotes.BrowseQuotesResponseAPIDto;
 public class CheapestQuotesClientImpl implements CheapestQuotesClient {
 
   private static final String CHEAPEST_QUOTES_PATH_URL =
-      "/{country}/{currency}/{locale}/{city}/anywhere/{outboundPartialDate}/{inboundPartialDate}";
+      "/{market}/{currency}/{locale}/{originPlace}/{destinationPlace}/{outboundPartialDate}/{inboundPartialDate}";
 
   private final RestTemplate skyscannerRestTemplate;
   private final String cheapestQuotesUrl;
   private final String apiKey;
+  private final ObjectMapper objectMapper;
 
   private static final String ERROR_MESSAGE = "Could not get a valid skyscanner quote response.";
+  private static final String VALIDATION_MESSAGE =
+      "Skyscanner quote response included validation errors.";
 
   @Autowired
   public CheapestQuotesClientImpl(final RestTemplate restTemplate,
       @Value("${skyscanner.cheapest-quotes-base-url}") final String cheapestQuotesBaseUrl,
-      @Value("${skyscanner.api-key}") final String apiKey) {
+      @Value("${skyscanner.api-key}") final String apiKey, final ObjectMapper objectMapper) {
     this.cheapestQuotesUrl = cheapestQuotesBaseUrl + CHEAPEST_QUOTES_PATH_URL;
     this.apiKey = apiKey;
     this.skyscannerRestTemplate = restTemplate;
+    this.objectMapper = objectMapper;
   }
 
 
@@ -42,15 +54,25 @@ public class CheapestQuotesClientImpl implements CheapestQuotesClient {
   @Override
   public BrowseQuotesResponseAPIDto getCheapestQuotes(final CheapestQuotesRequest request) {
 
+    ResponseEntity<BrowseQuotesResponseAPIDto> responseEntity = null;
     try {
-      final ResponseEntity<BrowseQuotesResponseAPIDto> responseEntity = skyscannerRestTemplate
-          .exchange(buildUrl(request), GET, null, BrowseQuotesResponseAPIDto.class);
+      responseEntity = skyscannerRestTemplate.exchange(buildUrl(request), GET, null,
+          BrowseQuotesResponseAPIDto.class);
       return responseEntity.getBody();
 
     } catch (final HttpStatusCodeException e) {
-      // final String errorpayload = e.getResponseBodyAsString();
-      if (e.getStatusCode() == HttpStatus.BAD_REQUEST) {
-        throw new SkyscannerBadRequestException(ERROR_MESSAGE + " Error: Bad Request.");
+      if (e.getStatusCode() == BAD_REQUEST) {
+        BrowseQuotesResponseAPIDto response = null;
+        try {
+          response =
+              objectMapper.readValue(e.getResponseBodyAsString(), BrowseQuotesResponseAPIDto.class);
+        } catch (final Throwable throwable) {
+          throw new SkyscannerServerException(
+              ERROR_MESSAGE + " Error: Could not unmarshal error response. Response was: "
+                  + e.getResponseBodyAsString());
+
+        }
+        throw new SkyscannerBadRequestException(VALIDATION_MESSAGE, response.getValidationErrors());
       }
 
       throw new SkyscannerServerException(ERROR_MESSAGE + " Error: Internal Server Error.");
@@ -59,15 +81,34 @@ public class CheapestQuotesClientImpl implements CheapestQuotesClient {
 
   private String buildUrl(final CheapestQuotesRequest request) {
     // @formatter:off
-    return fromPath(cheapestQuotesUrl).build(request.getCountry(), 
+    return fromPath(cheapestQuotesUrl).build(request.getMarket(), 
                                              request.getCurrency(),
                                              request.getLocale(),
-                                             request.getCity(),
+                                             request.getOriginCity(),
+                                             request.getDestinationCountry(),
                                              request.getOutboundPartialDate().toString(),
                                              request.getInboundPartialDate().toString())
         .toString() + "?apiKey=" + apiKey;
     // @formatter:on
 
+  }
+
+  public String parse(final String json) throws JsonProcessingException, IOException {
+    final JsonFactory factory = new JsonFactory();
+
+    final ObjectMapper mapper = new ObjectMapper(factory);
+    final JsonNode rootNode = mapper.readTree(json);
+
+    final Iterator<Map.Entry<String, JsonNode>> fieldsIterator = rootNode.fields();
+    while (fieldsIterator.hasNext()) {
+
+      final Map.Entry<String, JsonNode> field = fieldsIterator.next();
+      if (field.getKey().equals("Message")) {
+        return field.getValue().textValue();
+      }
+    }
+
+    return "Unknown error";
   }
 
 

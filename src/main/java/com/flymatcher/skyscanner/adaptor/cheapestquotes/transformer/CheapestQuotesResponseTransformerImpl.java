@@ -41,6 +41,7 @@ public class CheapestQuotesResponseTransformerImpl implements CheapestQuotesResp
     final SkyscannerQuote quote = new SkyscannerQuote();
     quote.setDirect(q.getDirect());
     quote.setPrice(q.getMinPrice());
+    quote.setQuoteDate(parse(q.getQuoteDateTime()));
 
     quote.setInboundLeg(createInOutBoundLeg(response, q.getInboundLeg()));
     quote.setOutboundLeg(createInOutBoundLeg(response, q.getOutboundLeg()));
@@ -54,9 +55,11 @@ public class CheapestQuotesResponseTransformerImpl implements CheapestQuotesResp
     leg.setDepartureDate(parse(inoutLeg.getDepartureDate()));
 
     final List<Integer> carrierIds = inoutLeg.getCarrierIds();
+
     if (carrierIds != null && !carrierIds.isEmpty()) {
       leg.setCarrier(carrierLookUp(response.getCarriers(), carrierIds.get(0)));
     }
+
     leg.setOrigin(placeLookUp(response.getPlaces(), inoutLeg.getOriginId()));
     leg.setDestination(placeLookUp(response.getPlaces(), inoutLeg.getDestinationId()));
     return leg;

@@ -28,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.flymatcher.skyscanner.adaptor.cheapestquotes.dto.CheapestQuotesRequest;
 import com.flymatcher.skyscanner.adaptor.exception.SkyscannerBadRequestException;
 import com.flymatcher.skyscanner.adaptor.exception.SkyscannerServerException;
@@ -37,7 +38,7 @@ public class CheapestQuotesClientTest {
 
   private static final String SKYSCANNER_CHEAPEST_QUOTES_BASE_URL = "base-url";
   private static final String CHEAPEST_QUOTES_PATH_URL =
-      "/GR/EUR/en-GB/ATH/anywhere/2016-10-10/2016-10-20";
+      "/GR/EUR/en-GB/ATH/ESP/2016-10-10/2016-10-20";
 
   private static final String SKYSCANNER_API_KEY = "api-key";
 
@@ -45,6 +46,8 @@ public class CheapestQuotesClientTest {
       + CHEAPEST_QUOTES_PATH_URL + "?apiKey=" + SKYSCANNER_API_KEY;
 
   private static final String ERROR_MESSAGE = "Could not get a valid skyscanner quote response.";
+  private static final String VALIDATION_MESSAGE =
+      "Skyscanner quote response included validation errors.";
 
   private CheapestQuotesClient client;
 
@@ -53,6 +56,7 @@ public class CheapestQuotesClientTest {
   @Mock
   private ResponseEntity<BrowseQuotesResponseAPIDto> mockResponseEntity;
 
+
   @Rule
   public ExpectedException expectedException = none();
 
@@ -60,7 +64,7 @@ public class CheapestQuotesClientTest {
   public void setUp() throws Exception {
     initMocks(this);
     client = new CheapestQuotesClientImpl(mockRestTemplate, SKYSCANNER_CHEAPEST_QUOTES_BASE_URL,
-        SKYSCANNER_API_KEY);
+        SKYSCANNER_API_KEY, new ObjectMapper());
   }
 
   @Test
@@ -92,14 +96,35 @@ public class CheapestQuotesClientTest {
         aCheapestQuotesRequest().withDefaultValues().build();
 
     final String errorJson =
-        "{\"ValidationErrors\": {\"ParameterName\": \"apikey\", \"Message\": \"ApiKey invalid\"}]}";
+        "{\"ValidationErrors\": [{\"ParameterName\": \"apikey\", \"Message\": \"ApiKey invalid\"}]}";
 
     given(
         mockRestTemplate.exchange(CHEAPEST_QUOTES_URL, GET, null, BrowseQuotesResponseAPIDto.class))
             .willThrow(buildHttpStatusCodeException(BAD_REQUEST, errorJson));
 
     expectedException.expect(SkyscannerBadRequestException.class);
-    expectedException.expectMessage(ERROR_MESSAGE + " Error: Bad Request.");
+    expectedException.expectMessage(VALIDATION_MESSAGE);
+
+    client.getCheapestQuotes(cheapestQuotesRequest);
+
+
+  }
+
+  @Test
+  public void shouldThrowSkyscannerServerErrorForUnexpectedValidationError() {
+
+    final CheapestQuotesRequest cheapestQuotesRequest =
+        aCheapestQuotesRequest().withDefaultValues().build();
+
+    final String errorJson = "{\"error\":\"Some unexpected json response\"}";
+
+    given(
+        mockRestTemplate.exchange(CHEAPEST_QUOTES_URL, GET, null, BrowseQuotesResponseAPIDto.class))
+            .willThrow(buildHttpStatusCodeException(BAD_REQUEST, errorJson));
+
+    expectedException.expect(SkyscannerServerException.class);
+    expectedException.expectMessage(
+        ERROR_MESSAGE + " Error: Could not unmarshal error response. Response was: " + errorJson);
 
     client.getCheapestQuotes(cheapestQuotesRequest);
 

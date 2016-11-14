@@ -12,13 +12,15 @@ import com.flymatcher.skyscanner.cheapestquotes.BrowseQuotesResponseAPIDto;
 @Component
 public class CheapestQuotesServiceImpl implements CheapestQuotesService {
 
-  private final CheapestQuotesResponseTransformer transformer;
+  private final CheapestQuotesResponseTransformer successTransformer;
+
   private final CheapestQuotesClient client;
 
   @Autowired
-  public CheapestQuotesServiceImpl(final CheapestQuotesResponseTransformer transformer,
+  public CheapestQuotesServiceImpl(
+      final CheapestQuotesResponseTransformer successTransformer,
       final CheapestQuotesClient client) {
-    this.transformer = transformer;
+    this.successTransformer = successTransformer;
     this.client = client;
   }
 
@@ -26,7 +28,8 @@ public class CheapestQuotesServiceImpl implements CheapestQuotesService {
   public SkyscannerCheapestQuotesResponse getSkyscannerCheapestQuotesResponse(
       final CheapestQuotesRequest request) {
     final BrowseQuotesResponseAPIDto clientResponse = client.getCheapestQuotes(request);
-    return transformer.transform(clientResponse);
+
+    return successTransformer.transform(clientResponse);
   }
 
 }

@@ -15,8 +15,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<skyscanner-adaptor-api.version>1.0.3-SNAPSHOT</skyscanner-adaptor-api.version>
-		<skyscanner-cheapest-quotes-api.version>1.0.2-SNAPSHOT</skyscanner-cheapest-quotes-api.version>
+		<skyscanner-adaptor-api.version>1.0.4</skyscanner-adaptor-api.version>
+		<skyscanner-cheapest-quotes-api.version>1.0.2</skyscanner-cheapest-quotes-api.version>
+		<flymatcher-error-api.version>1.0.1</flymatcher-error-api.version>
 
 	</properties>
 
@@ -46,6 +47,19 @@
 			<classifier>tests</classifier>
 			<scope>test</scope>
 			<version>${skyscanner-cheapest-quotes-api.version}</version>
+		</dependency>
+		
+				<dependency>
+			<groupId>com.flymatcher</groupId>
+			<artifactId>flymatcher-error-api</artifactId>
+			<version>${flymatcher-error-api.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.flymatcher</groupId>
+			<artifactId>flymatcher-error-api</artifactId>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+			<version>${flymatcher-error-api.version}</version>
 		</dependency>
 
 		<dependency>

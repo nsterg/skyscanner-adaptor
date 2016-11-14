@@ -7,56 +7,51 @@ import static org.apache.commons.lang.builder.ToStringBuilder.reflectionToString
 
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
 public class CheapestQuotesRequest {
 
-  @JsonPropertyOrder({"country", "city", "currency", "locale", "outboundPartialDate",
-      "inboundPartialDate"})
+  private String market;
 
-  private String country;
-
-  private String city;
+  private String originCity;
 
   private String currency;
 
   private String locale;
 
-  @JsonFormat(pattern = "yyyy-MM-dd")
+  private String destinationCountry;
+
   private LocalDate outboundPartialDate;
 
-  @JsonFormat(pattern = "yyyy-MM-dd")
   private LocalDate inboundPartialDate;
 
 
-  public static CheapestQuotesRequest valueOf(final String country, final String city,
-      final String currency, final String locale, final String outboundPartialDate,
-      final String inboundPartialDate) {
+  public static CheapestQuotesRequest valueOf(final String market, final String city,
+      final String destinationCountry, final String currency, final String locale,
+      final String outboundPartialDate, final String inboundPartialDate) {
     final CheapestQuotesRequest request = new CheapestQuotesRequest();
-    request.country = country;
-    request.city = city;
+    request.market = market;
+    request.originCity = city;
     request.currency = currency;
     request.locale = locale;
+    request.destinationCountry = destinationCountry;
     request.outboundPartialDate = parse(outboundPartialDate);
     request.inboundPartialDate = parse(inboundPartialDate);
     return request;
   }
 
-  public String getCountry() {
-    return country;
+  public String getMarket() {
+    return market;
   }
 
-  public void setCountry(final String country) {
-    this.country = country;
+  public void setMarket(final String market) {
+    this.market = market;
   }
 
-  public String getCity() {
-    return city;
+  public String getOriginCity() {
+    return originCity;
   }
 
-  public void setCity(final String city) {
-    this.city = city;
+  public void setOriginCity(final String city) {
+    this.originCity = city;
   }
 
   public String getCurrency() {
@@ -74,6 +69,14 @@ public class CheapestQuotesRequest {
 
   public void setLocale(final String locale) {
     this.locale = locale;
+  }
+
+  public String getDestinationCountry() {
+    return destinationCountry;
+  }
+
+  public void setDestinationCountry(final String destinationCountry) {
+    this.destinationCountry = destinationCountry;
   }
 
   public LocalDate getOutboundPartialDate() {

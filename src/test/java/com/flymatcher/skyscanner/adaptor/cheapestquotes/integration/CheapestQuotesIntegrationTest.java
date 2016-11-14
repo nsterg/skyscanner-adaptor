@@ -5,6 +5,8 @@ import static com.github.restdriver.clientdriver.RestClientDriver.giveResponse;
 import static com.github.restdriver.clientdriver.RestClientDriver.onRequestTo;
 import static com.jayway.restassured.RestAssured.given;
 import static org.apache.commons.io.FileUtils.readFileToString;
+import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
+import static org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR;
 import static org.apache.http.HttpStatus.SC_OK;
 import static uk.co.datumedge.hamcrest.json.SameJSONAs.sameJSONAs;
 
@@ -58,14 +60,15 @@ public class CheapestQuotesIntegrationTest {
         "src/test/resources/integration/responses/skyscanner-cheapest-quotes-response-200.json"));
 
     driver.addExpectation(
-        onRequestTo("/GR/GBP/en-GB/ATH/anywhere/2016-10-10/2016-10-20").withMethod(GET)
+        onRequestTo("/GR/GBP/en-GB/ATH/ESP/2016-10-10/2016-10-20").withMethod(GET)
             .withParam("apiKey", apiKey),
         giveResponse(skyscannerResponse, "application/json").withStatus(200));
 
     // @formatter:off
     given()
-        .pathParam("country","GR")
-        .pathParam("city","ATH")
+        .pathParam("market","GR")
+        .pathParam("originCity","ATH")
+        .pathParam("destinationCountry","ESP")        
         .pathParam("currency","GBP")
         .pathParam("locale","en-GB")
         .pathParam("outboundPartialDate","2016-10-10")
@@ -80,9 +83,68 @@ public class CheapestQuotesIntegrationTest {
     // @formatter:on
   }
 
+  @Test
+  public void shouldReturn500ForSkyscannerServerError() throws IOException {
+
+    final String skyscannerResponse = "Unexpected skyscanner server error";
+
+    driver.addExpectation(
+        onRequestTo("/GR/GBP/en-GB/ATH/ESP/2016-10-10/2016-10-20").withMethod(GET)
+            .withParam("apiKey", apiKey),
+        giveResponse(skyscannerResponse, "application/json").withStatus(500));
+
+    // @formatter:off
+    given()
+        .pathParam("market","GR")
+        .pathParam("originCity","ATH")
+        .pathParam("destinationCountry","ESP")        
+        .pathParam("currency","GBP")
+        .pathParam("locale","en-GB")
+        .pathParam("outboundPartialDate","2016-10-10")
+        .pathParam("inboundPartialDate","2016-10-20")
+        .when()
+           .get(buildRequestUrlStr())
+        .then()
+           .assertThat()
+             .body(sameJSONAs(readFileToString(new File(
+               "src/test/resources/integration/responses/adaptor-cheapest-quotes-response-500.json"))))
+             .statusCode(SC_INTERNAL_SERVER_ERROR);
+    // @formatter:on
+  }
+
+  @Test
+  public void shouldReturn400ForSkyscannerBadRequest() throws IOException {
+
+    final String skyscannerResponse = readFileToString(new File(
+        "src/test/resources/integration/responses/skyscanner-cheapest-quotes-response-400.json"));
+
+    driver.addExpectation(
+        onRequestTo("/GR/GBP/en-GB/ATH/BAD_DESTINATION/2016-10-10/2016-10-20").withMethod(GET)
+            .withParam("apiKey", apiKey),
+        giveResponse(skyscannerResponse, "application/json").withStatus(400));
+
+    // @formatter:off
+    given()
+        .pathParam("market","GR")
+        .pathParam("originCity","ATH")
+        .pathParam("destinationCountry","BAD_DESTINATION")        
+        .pathParam("currency","GBP")
+        .pathParam("locale","en-GB")
+        .pathParam("outboundPartialDate","2016-10-10")
+        .pathParam("inboundPartialDate","2016-10-20")
+        .when()
+           .get(buildRequestUrlStr())
+        .then()
+           .assertThat()
+             .body(sameJSONAs(readFileToString(new File(
+               "src/test/resources/integration/responses/adaptor-cheapest-quotes-response-400.json"))))
+             .statusCode(SC_BAD_REQUEST);
+    // @formatter:on
+  }
+
   private String buildRequestUrlStr() {
     return "http://localhost:" + port + contextPath
-        + "/v1/cheapest-quotes/{country}/{city}/{currency}/{locale}/{outboundPartialDate}/{inboundPartialDate}";
+        + "/v1/cheapest-quotes/{market}/{originCity}/{destinationCountry}/{currency}/{locale}/{outboundPartialDate}/{inboundPartialDate}";
   }
 
 }

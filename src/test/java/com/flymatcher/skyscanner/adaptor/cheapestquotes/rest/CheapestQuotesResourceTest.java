@@ -18,8 +18,9 @@ import com.flymatcher.skyscanner.adaptor.cheapestquotes.service.CheapestQuotesSe
 
 public class CheapestQuotesResourceTest {
 
-  private static final String COUNTRY = "GR";
-  private static final String CITY = "ATH";
+  private static final String MARKET = "GR";
+  private static final String ORIGIN_CITY = "ATH";
+  private static final String DESTINATION_COUNTRY = "ESP";
   private static final String CURRENCY = "EUR";
   private static final String LOCALE = "en-GB";
   private static final String OUTBOUND_DATE = "2016-10-10";
@@ -47,8 +48,8 @@ public class CheapestQuotesResourceTest {
 
     given(mockService.getSkyscannerCheapestQuotesResponse(request)).willReturn(serviceResponse);
 
-    final ResponseEntity<? extends Object> actual =
-        resource.getCheapestQuotes(COUNTRY, CITY, CURRENCY, LOCALE, OUTBOUND_DATE, INBOUND_DATE);
+    final ResponseEntity<? extends Object> actual = resource.getCheapestQuotes(MARKET, ORIGIN_CITY,
+        DESTINATION_COUNTRY, CURRENCY, LOCALE, OUTBOUND_DATE, INBOUND_DATE);
 
     assertEquals("Incorrect status", OK, actual.getStatusCode());
     assertEquals("Incorrect body", serviceResponse, actual.getBody());

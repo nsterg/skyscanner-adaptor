@@ -4,8 +4,8 @@ import static com.flymatcher.skyscanner.adaptor.api.builders.LegBuilder.aLeg;
 import static com.flymatcher.skyscanner.adaptor.api.builders.SkyscannerCheapestQuotesResponseBuilder.aSkyscannerCheapestQuotesResponse;
 import static com.flymatcher.skyscanner.adaptor.api.builders.SkyscannerQuoteBuilder.aSkyscannerQuote;
 import static com.flymatcher.skyscanner.cheapestquotes.builders.BrowseQuotesResponseAPIDtoBuilder.aBrowseQuotesResponseAPIDto;
-import static com.flymatcher.skyscanner.cheapestquotes.builders.SkyscannerLegBuilder.aSkyscannerLeg;
 import static com.flymatcher.skyscanner.cheapestquotes.builders.QuoteDtoBuilder.aQuoteDto;
+import static com.flymatcher.skyscanner.cheapestquotes.builders.SkyscannerLegBuilder.aSkyscannerLeg;
 import static com.flymatcher.skyscanner.cheapestquotes.carrier.builders.CarriersDtoBuilder.aCarriersDto;
 import static com.flymatcher.skyscanner.cheapestquotes.currency.builders.CurrencyDtoBuilder.aCurrencyDto;
 import static com.flymatcher.skyscanner.cheapestquotes.place.builders.PlaceDtoBuilder.aPlaceDto;
@@ -28,6 +28,10 @@ public class CheapestQuotesResponseTransformerTest {
   private static final String ORIGIN = "Athens International";
   private static final String DESTINATION1 = "Madrid";
   private static final String DESTINATION2 = "Paris Charles de Gaulle";
+  private static final String QUOTE_DATE_1 = "2016-08-06T22:01:00";
+  private static final String QUOTE_DATE_2 = "2016-08-18T11:56:00";
+
+
 
   private final CheapestQuotesResponseTransformer transformer =
       new CheapestQuotesResponseTransformerImpl();
@@ -38,10 +42,10 @@ public class CheapestQuotesResponseTransformerTest {
 
     // @formatter:off
     final SkyscannerCheapestQuotesResponse expected = aSkyscannerCheapestQuotesResponse().withQuotes(
-                                                            aSkyscannerQuote().withDirect(true).withPrice(62)
+                                                            aSkyscannerQuote().withDirect(true).withPrice(62).withQuoteDate(QUOTE_DATE_1)
                                                               .withInboundLeg(buildInBoundLeg(DESTINATION1))
                                                               .withOutboundLeg(buildOutBoundLeg(DESTINATION1)),
-                                                            aSkyscannerQuote().withDirect(true).withPrice(72)
+                                                            aSkyscannerQuote().withDirect(true).withPrice(72).withQuoteDate(QUOTE_DATE_2)
                                                               .withInboundLeg(buildInBoundLeg(DESTINATION2))
                                                               .withOutboundLeg(buildOutBoundLeg(DESTINATION2)))
                                                           .build();
@@ -79,7 +83,7 @@ public class CheapestQuotesResponseTransformerTest {
                                                 .withDestinationId(67652)
                                                 .withOriginId(40920))                                                                    
                                 .withMinPrice(62)
-                                .withQuoteDateTime("2016-08-06T22:01:00")
+                                .withQuoteDateTime(QUOTE_DATE_1)
                                 .withQuoteId(1), 
                                 aQuoteDto()
                                 .withDirect(true)
@@ -94,7 +98,7 @@ public class CheapestQuotesResponseTransformerTest {
                                                 .withDestinationId(44759)
                                                 .withOriginId(40920))                                                                    
                                 .withMinPrice(72)
-                                .withQuoteDateTime("2016-08-18T11:56:00")
+                                .withQuoteDateTime(QUOTE_DATE_2)
                                 .withQuoteId(2))
                     .withPlaces(aPlaceDto()
                                       .withCityId("ATHE")
