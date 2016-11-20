@@ -3,7 +3,7 @@
    "originCity":"ATH",
    "currency":"GBP",
    "locale":"en-GB",
-   "destinationCountry":"ESP",
+   "destinationCountry":"BAD_DESTINATION",
    "outboundPartialDate":"2016-10-10",
    "inboundPartialDate":"2016-10-20"
 }

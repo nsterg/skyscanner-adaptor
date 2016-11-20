@@ -4,6 +4,7 @@ import static com.github.restdriver.clientdriver.ClientDriverRequest.Method.GET;
 import static com.github.restdriver.clientdriver.RestClientDriver.giveResponse;
 import static com.github.restdriver.clientdriver.RestClientDriver.onRequestTo;
 import static com.jayway.restassured.RestAssured.given;
+import static com.jayway.restassured.http.ContentType.JSON;
 import static org.apache.commons.io.FileUtils.readFileToString;
 import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
 import static org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR;
@@ -59,6 +60,9 @@ public class CheapestQuotesIntegrationTest {
     final String skyscannerResponse = readFileToString(new File(
         "src/test/resources/integration/responses/skyscanner-cheapest-quotes-response-200.json"));
 
+    final String requestBody = readFileToString(
+        new File("src/test/resources/integration/requests/cheapest-quotes-request.json"));
+
     driver.addExpectation(
         onRequestTo("/GR/GBP/en-GB/ATH/ESP/2016-10-10/2016-10-20").withMethod(GET)
             .withParam("apiKey", apiKey),
@@ -66,13 +70,9 @@ public class CheapestQuotesIntegrationTest {
 
     // @formatter:off
     given()
-        .pathParam("market","GR")
-        .pathParam("originCity","ATH")
-        .pathParam("destinationCountry","ESP")        
-        .pathParam("currency","GBP")
-        .pathParam("locale","en-GB")
-        .pathParam("outboundPartialDate","2016-10-10")
-        .pathParam("inboundPartialDate","2016-10-20")
+        .accept(JSON)
+        .contentType(JSON)
+        .body(requestBody)
         .when()
            .get(buildRequestUrlStr())
         .then()
@@ -88,6 +88,9 @@ public class CheapestQuotesIntegrationTest {
 
     final String skyscannerResponse = "Unexpected skyscanner server error";
 
+    final String requestBody = readFileToString(
+        new File("src/test/resources/integration/requests/cheapest-quotes-request.json"));
+
     driver.addExpectation(
         onRequestTo("/GR/GBP/en-GB/ATH/ESP/2016-10-10/2016-10-20").withMethod(GET)
             .withParam("apiKey", apiKey),
@@ -95,13 +98,9 @@ public class CheapestQuotesIntegrationTest {
 
     // @formatter:off
     given()
-        .pathParam("market","GR")
-        .pathParam("originCity","ATH")
-        .pathParam("destinationCountry","ESP")        
-        .pathParam("currency","GBP")
-        .pathParam("locale","en-GB")
-        .pathParam("outboundPartialDate","2016-10-10")
-        .pathParam("inboundPartialDate","2016-10-20")
+            .accept(JSON)
+            .contentType(JSON)
+            .body(requestBody)
         .when()
            .get(buildRequestUrlStr())
         .then()
@@ -118,6 +117,9 @@ public class CheapestQuotesIntegrationTest {
     final String skyscannerResponse = readFileToString(new File(
         "src/test/resources/integration/responses/skyscanner-cheapest-quotes-response-400.json"));
 
+    final String requestBody = readFileToString(
+        new File("src/test/resources/integration/requests/cheapest-quotes-400-request.json"));
+
     driver.addExpectation(
         onRequestTo("/GR/GBP/en-GB/ATH/BAD_DESTINATION/2016-10-10/2016-10-20").withMethod(GET)
             .withParam("apiKey", apiKey),
@@ -125,13 +127,9 @@ public class CheapestQuotesIntegrationTest {
 
     // @formatter:off
     given()
-        .pathParam("market","GR")
-        .pathParam("originCity","ATH")
-        .pathParam("destinationCountry","BAD_DESTINATION")        
-        .pathParam("currency","GBP")
-        .pathParam("locale","en-GB")
-        .pathParam("outboundPartialDate","2016-10-10")
-        .pathParam("inboundPartialDate","2016-10-20")
+            .accept(JSON)
+            .contentType(JSON)
+            .body(requestBody)
         .when()
            .get(buildRequestUrlStr())
         .then()
@@ -143,8 +141,7 @@ public class CheapestQuotesIntegrationTest {
   }
 
   private String buildRequestUrlStr() {
-    return "http://localhost:" + port + contextPath
-        + "/v1/cheapest-quotes/{market}/{originCity}/{destinationCountry}/{currency}/{locale}/{outboundPartialDate}/{inboundPartialDate}";
+    return "http://localhost:" + port + contextPath + "/v1/cheapest-quotes/";
   }
 
 }

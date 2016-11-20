@@ -14,7 +14,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<skyscanner-adaptor-api.version>1.0.4</skyscanner-adaptor-api.version>
+		<skyscanner-adaptor-api.version>1.0.5</skyscanner-adaptor-api.version>
 		<skyscanner-cheapest-quotes-api.version>1.0.2</skyscanner-cheapest-quotes-api.version>
 		<flymatcher-error-api.version>1.0.1</flymatcher-error-api.version>
 

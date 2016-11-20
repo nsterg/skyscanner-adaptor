@@ -1,7 +1,7 @@
 package com.flymatcher.skyscanner.adaptor.cheapestquotes.rest;
 
+import static com.flymatcher.skyscanner.adaptor.api.builders.CheapestQuotesRequestBuilder.aCheapestQuotesRequest;
 import static com.flymatcher.skyscanner.adaptor.api.builders.SkyscannerCheapestQuotesResponseBuilder.aSkyscannerCheapestQuotesResponse;
-import static com.flymatcher.skyscanner.adaptor.cheapestquotes.dto.builders.CheapestQuotesRequestBuilder.aCheapestQuotesRequest;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -12,19 +12,11 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.springframework.http.ResponseEntity;
 
+import com.flymatcher.skyscanner.adaptor.api.CheapestQuotesRequest;
 import com.flymatcher.skyscanner.adaptor.api.SkyscannerCheapestQuotesResponse;
-import com.flymatcher.skyscanner.adaptor.cheapestquotes.dto.CheapestQuotesRequest;
 import com.flymatcher.skyscanner.adaptor.cheapestquotes.service.CheapestQuotesService;
 
 public class CheapestQuotesResourceTest {
-
-  private static final String MARKET = "GR";
-  private static final String ORIGIN_CITY = "ATH";
-  private static final String DESTINATION_COUNTRY = "ESP";
-  private static final String CURRENCY = "EUR";
-  private static final String LOCALE = "en-GB";
-  private static final String OUTBOUND_DATE = "2016-10-10";
-  private static final String INBOUND_DATE = "2016-10-20";
 
   @Mock
   private CheapestQuotesService mockService;
@@ -48,8 +40,7 @@ public class CheapestQuotesResourceTest {
 
     given(mockService.getSkyscannerCheapestQuotesResponse(request)).willReturn(serviceResponse);
 
-    final ResponseEntity<? extends Object> actual = resource.getCheapestQuotes(MARKET, ORIGIN_CITY,
-        DESTINATION_COUNTRY, CURRENCY, LOCALE, OUTBOUND_DATE, INBOUND_DATE);
+    final ResponseEntity<? extends Object> actual = resource.getCheapestQuotes(request);
 
     assertEquals("Incorrect status", OK, actual.getStatusCode());
     assertEquals("Incorrect body", serviceResponse, actual.getBody());
