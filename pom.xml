@@ -13,7 +13,6 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<myMavenRepo.read.url>https://mymavenrepo.com/repo/ZIVpZfjpXSF3ujM26UZS/</myMavenRepo.read.url>
 
 		<skyscanner-adaptor-api.version>1.0.6</skyscanner-adaptor-api.version>
 		<skyscanner-cheapest-quotes-api.version>1.0.3</skyscanner-cheapest-quotes-api.version>
@@ -132,7 +131,7 @@
 	<repositories>
 		<repository>
             <id>myMavenRepo.read</id>
-            <url>${myMavenRepo.read.url}</url>
+            <url>https://mymavenrepo.com/repo/ZIVpZfjpXSF3ujM26UZS</url>
 		</repository>
 	</repositories>
 
