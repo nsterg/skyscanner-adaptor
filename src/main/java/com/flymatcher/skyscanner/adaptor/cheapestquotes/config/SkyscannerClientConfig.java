@@ -2,7 +2,6 @@ package com.flymatcher.skyscanner.adaptor.cheapestquotes.config;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -16,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
-public class SkyscannerCLientConfig {
+public class SkyscannerClientConfig {
 
   @Bean
   RestTemplate skyscannerClientRestTemplate(
@@ -39,15 +38,8 @@ public class SkyscannerCLientConfig {
 
 
   @Bean
-  public ClientHttpRequestFactory scyscannerClientClientHttpRequestFactory(
-      @Value("${telco.adaptor.mpforder.adaptor.client.connection.timeoutMs:25000}") final Integer connectionTimeoutMs,
-      @Value("${telco.adaptor.mpforder.adaptor.client.read.timeoutMs:25000}") final Integer readTimeoutMs) {
-    final HttpComponentsClientHttpRequestFactory factory =
-        new HttpComponentsClientHttpRequestFactory();
+  public ClientHttpRequestFactory scyscannerClientClientHttpRequestFactory() {
+    return new HttpComponentsClientHttpRequestFactory();
 
-    factory.setConnectTimeout(connectionTimeoutMs);
-    factory.setReadTimeout(readTimeoutMs);
-
-    return factory;
   }
 }

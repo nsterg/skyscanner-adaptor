@@ -4,10 +4,6 @@ import static javax.ws.rs.core.UriBuilder.fromPath;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
-import java.io.IOException;
-import java.util.Iterator;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flymatcher.skyscanner.adaptor.api.CheapestQuotesRequest;
+import com.flymatcher.skyscanner.adaptor.domain.CheapestQuotesRequest;
 import com.flymatcher.skyscanner.adaptor.exception.SkyscannerBadRequestException;
 import com.flymatcher.skyscanner.adaptor.exception.SkyscannerServerException;
 import com.flymatcher.skyscanner.cheapestquotes.BrowseQuotesResponseAPIDto;
@@ -91,24 +84,6 @@ public class CheapestQuotesClientImpl implements CheapestQuotesClient {
         .toString() + "?apiKey=" + apiKey;
     // @formatter:on
 
-  }
-
-  public String parse(final String json) throws JsonProcessingException, IOException {
-    final JsonFactory factory = new JsonFactory();
-
-    final ObjectMapper mapper = new ObjectMapper(factory);
-    final JsonNode rootNode = mapper.readTree(json);
-
-    final Iterator<Map.Entry<String, JsonNode>> fieldsIterator = rootNode.fields();
-    while (fieldsIterator.hasNext()) {
-
-      final Map.Entry<String, JsonNode> field = fieldsIterator.next();
-      if (field.getKey().equals("Message")) {
-        return field.getValue().textValue();
-      }
-    }
-
-    return "Unknown error";
   }
 
 

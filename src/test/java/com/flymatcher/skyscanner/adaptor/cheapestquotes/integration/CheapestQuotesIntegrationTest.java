@@ -13,6 +13,8 @@ import static uk.co.datumedge.hamcrest.json.SameJSONAs.sameJSONAs;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -60,9 +62,6 @@ public class CheapestQuotesIntegrationTest {
     final String skyscannerResponse = readFileToString(new File(
         "src/test/resources/integration/responses/skyscanner-cheapest-quotes-response-200.json"));
 
-    final String requestBody = readFileToString(
-        new File("src/test/resources/integration/requests/cheapest-quotes-request.json"));
-
     driver.addExpectation(
         onRequestTo("/GR/GBP/en-GB/ATH/ESP/2016-10-10/2016-10-20").withMethod(GET)
             .withParam("apiKey", apiKey),
@@ -72,7 +71,7 @@ public class CheapestQuotesIntegrationTest {
     given()
         .accept(JSON)
         .contentType(JSON)
-        .body(requestBody)
+        .pathParameters(aParameterNameValuePairs())
         .when()
            .get(buildRequestUrlStr())
         .then()
@@ -83,13 +82,11 @@ public class CheapestQuotesIntegrationTest {
     // @formatter:on
   }
 
+
   @Test
   public void shouldReturn500ForSkyscannerServerError() throws IOException {
 
     final String skyscannerResponse = "Unexpected skyscanner server error";
-
-    final String requestBody = readFileToString(
-        new File("src/test/resources/integration/requests/cheapest-quotes-request.json"));
 
     driver.addExpectation(
         onRequestTo("/GR/GBP/en-GB/ATH/ESP/2016-10-10/2016-10-20").withMethod(GET)
@@ -100,7 +97,7 @@ public class CheapestQuotesIntegrationTest {
     given()
             .accept(JSON)
             .contentType(JSON)
-            .body(requestBody)
+            .pathParameters(aParameterNameValuePairs())
         .when()
            .get(buildRequestUrlStr())
         .then()
@@ -117,11 +114,8 @@ public class CheapestQuotesIntegrationTest {
     final String skyscannerResponse = readFileToString(new File(
         "src/test/resources/integration/responses/skyscanner-cheapest-quotes-response-400.json"));
 
-    final String requestBody = readFileToString(
-        new File("src/test/resources/integration/requests/cheapest-quotes-400-request.json"));
-
     driver.addExpectation(
-        onRequestTo("/GR/GBP/en-GB/ATH/BAD_DESTINATION/2016-10-10/2016-10-20").withMethod(GET)
+        onRequestTo("/GR/GBP/en-GB/ATH/ESP/2016-10-10/2016-10-20").withMethod(GET)
             .withParam("apiKey", apiKey),
         giveResponse(skyscannerResponse, "application/json").withStatus(400));
 
@@ -129,7 +123,7 @@ public class CheapestQuotesIntegrationTest {
     given()
             .accept(JSON)
             .contentType(JSON)
-            .body(requestBody)
+            .pathParameters(aParameterNameValuePairs())
         .when()
            .get(buildRequestUrlStr())
         .then()
@@ -140,8 +134,23 @@ public class CheapestQuotesIntegrationTest {
     // @formatter:on
   }
 
+
+  private Map<String, String> aParameterNameValuePairs() {
+    final Map<String, String> map = new HashMap<String, String>();
+    map.put("market", "GR");
+    map.put("currency", "GBP");
+    map.put("locale", "en-GB");
+    map.put("city", "ATH");
+    map.put("destinationCountry", "ESP");
+    map.put("outboundPartialDate", "2016-10-10");
+    map.put("inboundPartialDate", "2016-10-20");
+
+    return map;
+  }
+
   private String buildRequestUrlStr() {
-    return "http://localhost:" + port + contextPath + "/v1/cheapest-quotes/";
+    return "http://localhost:" + port + contextPath
+        + "/v1/cheapest-quotes//{market}/{currency}/{locale}/{city}/{destinationCountry}/{outboundPartialDate}/{inboundPartialDate}";
   }
 
 }

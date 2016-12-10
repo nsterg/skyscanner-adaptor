@@ -5,7 +5,7 @@
 	<parent>
 		<artifactId>flymatcher-microservice-parent</artifactId>
 		<groupId>com.flymatcher</groupId>
-		<version>1.0.1</version>
+		<version>1.0.2</version>
 	</parent>
 
 	<artifactId>skyscanner-adaptor</artifactId>
@@ -13,10 +13,11 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<myMavenRepo.read.url>https://mymavenrepo.com/repo/ZIVpZfjpXSF3ujM26UZS/</myMavenRepo.read.url>
 
-		<skyscanner-adaptor-api.version>1.0.5</skyscanner-adaptor-api.version>
-		<skyscanner-cheapest-quotes-api.version>1.0.2</skyscanner-cheapest-quotes-api.version>
-		<flymatcher-error-api.version>1.0.1</flymatcher-error-api.version>
+		<skyscanner-adaptor-api.version>1.0.6</skyscanner-adaptor-api.version>
+		<skyscanner-cheapest-quotes-api.version>1.0.3</skyscanner-cheapest-quotes-api.version>
+		<flymatcher-error-api.version>1.0.2</flymatcher-error-api.version>
 
 	</properties>
 
@@ -130,8 +131,8 @@
 
 	<repositories>
 		<repository>
-			<id>libs-release-local</id>
-			<url>file:///c:/dev/flymatcher/repo/release</url>
+            <id>myMavenRepo.read</id>
+            <url>${myMavenRepo.read.url}</url>
 		</repository>
 	</repositories>
 

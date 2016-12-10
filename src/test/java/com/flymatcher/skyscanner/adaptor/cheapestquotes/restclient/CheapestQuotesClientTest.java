@@ -1,6 +1,6 @@
 package com.flymatcher.skyscanner.adaptor.cheapestquotes.restclient;
 
-import static com.flymatcher.skyscanner.adaptor.api.builders.CheapestQuotesRequestBuilder.aCheapestQuotesRequest;
+import static com.flymatcher.skyscanner.adaptor.cheapestquotes.domain.builders.CheapestQuotesRequestBuilder.aCheapestQuotesRequest;
 import static com.flymatcher.skyscanner.cheapestquotes.builders.BrowseQuotesResponseAPIDtoBuilder.aBrowseQuotesResponseAPIDto;
 import static com.flymatcher.skyscanner.cheapestquotes.builders.QuoteDtoBuilder.aQuoteDto;
 import static com.flymatcher.skyscanner.cheapestquotes.builders.SkyscannerLegBuilder.aSkyscannerLeg;
@@ -29,7 +29,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flymatcher.skyscanner.adaptor.api.CheapestQuotesRequest;
+import com.flymatcher.skyscanner.adaptor.domain.CheapestQuotesRequest;
 import com.flymatcher.skyscanner.adaptor.exception.SkyscannerBadRequestException;
 import com.flymatcher.skyscanner.adaptor.exception.SkyscannerServerException;
 import com.flymatcher.skyscanner.cheapestquotes.BrowseQuotesResponseAPIDto;

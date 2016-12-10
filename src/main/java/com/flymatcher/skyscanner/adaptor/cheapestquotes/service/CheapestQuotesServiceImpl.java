@@ -3,10 +3,10 @@ package com.flymatcher.skyscanner.adaptor.cheapestquotes.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.flymatcher.skyscanner.adaptor.api.CheapestQuotesRequest;
 import com.flymatcher.skyscanner.adaptor.api.SkyscannerCheapestQuotesResponse;
 import com.flymatcher.skyscanner.adaptor.cheapestquotes.restclient.CheapestQuotesClient;
 import com.flymatcher.skyscanner.adaptor.cheapestquotes.transformer.CheapestQuotesResponseTransformer;
+import com.flymatcher.skyscanner.adaptor.domain.CheapestQuotesRequest;
 import com.flymatcher.skyscanner.cheapestquotes.BrowseQuotesResponseAPIDto;
 
 @Component

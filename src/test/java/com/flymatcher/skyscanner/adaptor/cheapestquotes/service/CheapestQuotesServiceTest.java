@@ -1,9 +1,9 @@
 package com.flymatcher.skyscanner.adaptor.cheapestquotes.service;
 
-import static com.flymatcher.skyscanner.adaptor.api.builders.CheapestQuotesRequestBuilder.aCheapestQuotesRequest;
 import static com.flymatcher.skyscanner.adaptor.api.builders.LegBuilder.aLeg;
 import static com.flymatcher.skyscanner.adaptor.api.builders.SkyscannerCheapestQuotesResponseBuilder.aSkyscannerCheapestQuotesResponse;
 import static com.flymatcher.skyscanner.adaptor.api.builders.SkyscannerQuoteBuilder.aSkyscannerQuote;
+import static com.flymatcher.skyscanner.adaptor.cheapestquotes.domain.builders.CheapestQuotesRequestBuilder.aCheapestQuotesRequest;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -14,11 +14,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import com.flymatcher.skyscanner.adaptor.api.CheapestQuotesRequest;
 import com.flymatcher.skyscanner.adaptor.api.SkyscannerCheapestQuotesResponse;
 import com.flymatcher.skyscanner.adaptor.api.builders.LegBuilder;
 import com.flymatcher.skyscanner.adaptor.cheapestquotes.restclient.CheapestQuotesClient;
 import com.flymatcher.skyscanner.adaptor.cheapestquotes.transformer.CheapestQuotesResponseTransformer;
+import com.flymatcher.skyscanner.adaptor.domain.CheapestQuotesRequest;
 import com.flymatcher.skyscanner.cheapestquotes.BrowseQuotesResponseAPIDto;
 import com.flymatcher.skyscanner.cheapestquotes.builders.BrowseQuotesResponseAPIDtoBuilder;
 
