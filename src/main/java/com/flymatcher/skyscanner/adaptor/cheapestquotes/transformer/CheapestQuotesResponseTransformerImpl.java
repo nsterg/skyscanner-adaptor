@@ -62,6 +62,9 @@ public class CheapestQuotesResponseTransformerImpl implements CheapestQuotesResp
 
     leg.setOrigin(placeLookUp(response.getPlaces(), inoutLeg.getOriginId()));
     leg.setDestination(placeLookUp(response.getPlaces(), inoutLeg.getDestinationId()));
+    leg.setAirportCode(airportLookUp(response.getPlaces(), inoutLeg.getDestinationId()));
+    leg.setCountry(countryLookUp(response.getPlaces(), inoutLeg.getDestinationId()));
+
     return leg;
   }
 
@@ -69,6 +72,18 @@ public class CheapestQuotesResponseTransformerImpl implements CheapestQuotesResp
   private String placeLookUp(final List<PlaceDto> places, final int placeId) {
     final Map<Integer, String> placesMap =
         places.stream().collect(toMap(PlaceDto::getPlaceId, PlaceDto::getName));
+    return placesMap.get(placeId);
+  }
+
+  private String airportLookUp(final List<PlaceDto> places, final int placeId) {
+    final Map<Integer, String> placesMap =
+        places.stream().collect(toMap(PlaceDto::getPlaceId, PlaceDto::getIataCode));
+    return placesMap.get(placeId);
+  }
+
+  private String countryLookUp(final List<PlaceDto> places, final int placeId) {
+    final Map<Integer, String> placesMap =
+        places.stream().collect(toMap(PlaceDto::getPlaceId, PlaceDto::getCountryName));
     return placesMap.get(placeId);
   }
 

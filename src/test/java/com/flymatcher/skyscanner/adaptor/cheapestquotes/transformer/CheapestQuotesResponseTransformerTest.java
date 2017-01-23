@@ -31,6 +31,13 @@ public class CheapestQuotesResponseTransformerTest {
   private static final String QUOTE_DATE_1 = "2016-08-06T22:01:00";
   private static final String QUOTE_DATE_2 = "2016-08-18T11:56:00";
 
+  private static final String AIRPORT_CODE2 = "CDG";
+  private static final String AIRPORT_CODE1 = "MAD";
+  private static final String AIRPORT_CODE3 = "ATH";
+
+  private static final String COUNTRY2 = "France";
+  private static final String COUNTRY1 = "Spain";
+  private static final String COUNTRY3 = "Greece";
 
 
   private final CheapestQuotesResponseTransformer transformer =
@@ -42,13 +49,13 @@ public class CheapestQuotesResponseTransformerTest {
 
     // @formatter:off
     final SkyscannerCheapestQuotesResponse expected = aSkyscannerCheapestQuotesResponse().withQuotes(
-                                                            aSkyscannerQuote().withDirect(true).withPrice(62).withQuoteDate(QUOTE_DATE_1)
-                                                              .withInboundLeg(buildInBoundLeg(DESTINATION1))
-                                                              .withOutboundLeg(buildOutBoundLeg(DESTINATION1)),
-                                                            aSkyscannerQuote().withDirect(true).withPrice(72).withQuoteDate(QUOTE_DATE_2)
-                                                              .withInboundLeg(buildInBoundLeg(DESTINATION2))
-                                                              .withOutboundLeg(buildOutBoundLeg(DESTINATION2)))
-                                                          .build();
+                                                        aSkyscannerQuote().withDirect(true).withPrice(62).withQuoteDate(QUOTE_DATE_1)
+                                                        .withInboundLeg(buildInBoundLeg(DESTINATION1, AIRPORT_CODE3, COUNTRY3))
+                                                        .withOutboundLeg(buildOutBoundLeg(DESTINATION1, AIRPORT_CODE1, COUNTRY1)),
+                                                      aSkyscannerQuote().withDirect(true).withPrice(72).withQuoteDate(QUOTE_DATE_2)
+                                                        .withInboundLeg(buildInBoundLeg(DESTINATION2, AIRPORT_CODE3, COUNTRY3))
+                                                        .withOutboundLeg(buildOutBoundLeg(DESTINATION2, AIRPORT_CODE2, COUNTRY2)))
+                                                    .build();
     // @formatter:on
     final SkyscannerCheapestQuotesResponse actual = transformer.transform(skyscannerResponse);
     assertEquals(expected, actual);
@@ -57,14 +64,16 @@ public class CheapestQuotesResponseTransformerTest {
   }
 
 
-  private LegBuilder buildOutBoundLeg(final String destination) throws ParseException {
+  private LegBuilder buildOutBoundLeg(final String destination, final String airportCode,
+      final String country) throws ParseException {
     return aLeg().withCarrier(CARRIER).withOrigin(ORIGIN).withDestination(destination)
-        .withDepartureDate(OUT_BOUND_DATE);
+        .withAirportCode(airportCode).withCountry(country).withDepartureDate(OUT_BOUND_DATE);
   }
 
-  private LegBuilder buildInBoundLeg(final String destination) throws ParseException {
+  private LegBuilder buildInBoundLeg(final String destination, final String airportCode,
+      final String country) throws ParseException {
     return aLeg().withCarrier(CARRIER).withOrigin(destination).withDestination(ORIGIN)
-        .withDepartureDate(IN_BOUND_DATE);
+        .withAirportCode(airportCode).withCountry(country).withDepartureDate(IN_BOUND_DATE);
   }
 
   private BrowseQuotesResponseAPIDto createBrowseQuotesResponseAPIDto() {

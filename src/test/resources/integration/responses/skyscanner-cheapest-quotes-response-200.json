@@ -48,7 +48,7 @@
   "Places": [
     {
       "PlaceId": 40920,
-      "IataCode": "Ath",
+      "IataCode": "ATH",
       "Name": "Athens International",
       "Type": "Station",
       "SkyscannerCode": "ATH",
@@ -61,17 +61,17 @@
       "IataCode": "MAD",
       "Name": "Madrid",
       "Type": "Station",
-      "SkyscannerCode": "Mad",
+      "SkyscannerCode": "MAD",
       "CityName": "Madrid",
       "CityId": "MADRI",
       "CountryName": "Spain"
     },
     {
       "PlaceId": 44759,
-      "IataCode": "PAR",
+      "IataCode": "CDG",
       "Name": "Paris Charles de Gaulle",
       "Type": "Station",
-      "SkyscannerCode": "PAR",
+      "SkyscannerCode": "CDG",
       "CityName": "Paris",
       "CityId": "PARI",
       "CountryName": "France"
