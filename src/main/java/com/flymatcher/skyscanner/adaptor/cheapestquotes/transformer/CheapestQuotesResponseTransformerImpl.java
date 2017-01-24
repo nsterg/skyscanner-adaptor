@@ -1,9 +1,9 @@
 package com.flymatcher.skyscanner.adaptor.cheapestquotes.transformer;
 
 import static java.time.LocalDateTime.parse;
-import static java.util.stream.Collectors.toMap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -70,26 +70,28 @@ public class CheapestQuotesResponseTransformerImpl implements CheapestQuotesResp
 
 
   private String placeLookUp(final List<PlaceDto> places, final int placeId) {
-    final Map<Integer, String> placesMap =
-        places.stream().collect(toMap(PlaceDto::getPlaceId, PlaceDto::getName));
+    final Map<Integer, String> placesMap = new HashMap<>();
+    places.forEach(p -> placesMap.put(p.getPlaceId(), p.getName()));
+
     return placesMap.get(placeId);
   }
 
   private String airportLookUp(final List<PlaceDto> places, final int placeId) {
-    final Map<Integer, String> placesMap =
-        places.stream().collect(toMap(PlaceDto::getPlaceId, PlaceDto::getIataCode));
+    final Map<Integer, String> placesMap = new HashMap<>();
+    places.forEach(p -> placesMap.put(p.getPlaceId(), p.getIataCode()));
     return placesMap.get(placeId);
   }
 
   private String countryLookUp(final List<PlaceDto> places, final int placeId) {
-    final Map<Integer, String> placesMap =
-        places.stream().collect(toMap(PlaceDto::getPlaceId, PlaceDto::getCountryName));
+    final Map<Integer, String> placesMap = new HashMap<>();
+    places.forEach(p -> placesMap.put(p.getPlaceId(), p.getCountryName()));
+
     return placesMap.get(placeId);
   }
 
   private String carrierLookUp(final List<CarriersDto> carriers, final int carrierId) {
-    final Map<Integer, String> carriersMap =
-        carriers.stream().collect(toMap(CarriersDto::getCarrierId, CarriersDto::getName));
+    final Map<Integer, String> carriersMap = new HashMap<>();
+    carriers.forEach(c -> carriersMap.put(c.getCarrierId(), c.getName()));
     return carriersMap.get(carrierId);
   }
 
