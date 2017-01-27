@@ -71,7 +71,7 @@ public class CheapestQuotesResponseTransformerImpl implements CheapestQuotesResp
 
   private String placeLookUp(final List<PlaceDto> places, final int placeId) {
     final Map<Integer, String> placesMap = new HashMap<>();
-    places.forEach(p -> placesMap.put(p.getPlaceId(), p.getName()));
+    places.forEach(p -> placesMap.put(p.getPlaceId(), p.getCityName()));
 
     return placesMap.get(placeId);
   }

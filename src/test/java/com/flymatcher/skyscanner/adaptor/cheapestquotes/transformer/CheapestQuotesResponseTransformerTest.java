@@ -25,9 +25,9 @@ public class CheapestQuotesResponseTransformerTest {
   private static final String OUT_BOUND_DATE = "2016-10-10T00:00:00";
   private static final String IN_BOUND_DATE = "2016-10-20T00:00:00";
   private static final String CARRIER = "easyjet";
-  private static final String ORIGIN = "Athens International";
+  private static final String ORIGIN = "Athens";
   private static final String DESTINATION1 = "Madrid";
-  private static final String DESTINATION2 = "Paris Charles de Gaulle";
+  private static final String DESTINATION2 = "Paris";
   private static final String QUOTE_DATE_1 = "2016-08-06T22:01:00";
   private static final String QUOTE_DATE_2 = "2016-08-18T11:56:00";
 
