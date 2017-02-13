@@ -60,10 +60,15 @@ public class CheapestQuotesResponseTransformerImpl implements CheapestQuotesResp
       leg.setCarrier(carrierLookUp(response.getCarriers(), carrierIds.get(0)));
     }
 
-    leg.setOrigin(placeLookUp(response.getPlaces(), inoutLeg.getOriginId()));
-    leg.setDestination(placeLookUp(response.getPlaces(), inoutLeg.getDestinationId()));
-    leg.setAirportCode(airportLookUp(response.getPlaces(), inoutLeg.getDestinationId()));
-    leg.setCountry(countryLookUp(response.getPlaces(), inoutLeg.getDestinationId()));
+    final List<PlaceDto> places = response.getPlaces();
+
+    leg.setOrigin(placeLookUp(places, inoutLeg.getOriginId()));
+    leg.setDestination(placeLookUp(places, inoutLeg.getDestinationId()));
+    leg.setAirportCode(airportLookUp(places, inoutLeg.getDestinationId()));
+
+    final String country = countryLookUp(places, inoutLeg.getDestinationId());
+    leg.setCountry(country);
+    leg.setCountryCode(countryCodeLookUp(places, country));
 
     return leg;
   }
@@ -87,6 +92,14 @@ public class CheapestQuotesResponseTransformerImpl implements CheapestQuotesResp
     places.forEach(p -> placesMap.put(p.getPlaceId(), p.getCountryName()));
 
     return placesMap.get(placeId);
+  }
+
+  private String countryCodeLookUp(final List<PlaceDto> places, final String country) {
+    final Map<String, String> placesMap = new HashMap<>();
+    places.stream().filter(t -> t.getType().equals("Country"))
+        .forEach(p -> placesMap.put(p.getName(), p.getSkyscannerCode()));
+
+    return placesMap.get(country);
   }
 
   private String carrierLookUp(final List<CarriersDto> carriers, final int carrierId) {

@@ -38,6 +38,9 @@ public class CheapestQuotesResponseTransformerTest {
   private static final String COUNTRY2 = "France";
   private static final String COUNTRY1 = "Spain";
   private static final String COUNTRY3 = "Greece";
+  private static final String COUNTRY_CODE2 = "FR";
+  private static final String COUNTRY_CODE1 = "ES";
+  private static final String COUNTRY_CODE3 = "GR";
 
 
   private final CheapestQuotesResponseTransformer transformer =
@@ -50,11 +53,11 @@ public class CheapestQuotesResponseTransformerTest {
     // @formatter:off
     final SkyscannerCheapestQuotesResponse expected = aSkyscannerCheapestQuotesResponse().withQuotes(
                                                         aSkyscannerQuote().withDirect(true).withPrice(62).withQuoteDate(QUOTE_DATE_1)
-                                                        .withInboundLeg(buildInBoundLeg(DESTINATION1, AIRPORT_CODE3, COUNTRY3))
-                                                        .withOutboundLeg(buildOutBoundLeg(DESTINATION1, AIRPORT_CODE1, COUNTRY1)),
+                                                        .withInboundLeg(buildInBoundLeg(DESTINATION1, AIRPORT_CODE3, COUNTRY3, COUNTRY_CODE3))
+                                                        .withOutboundLeg(buildOutBoundLeg(DESTINATION1, AIRPORT_CODE1, COUNTRY1, COUNTRY_CODE1)),
                                                       aSkyscannerQuote().withDirect(true).withPrice(72).withQuoteDate(QUOTE_DATE_2)
-                                                        .withInboundLeg(buildInBoundLeg(DESTINATION2, AIRPORT_CODE3, COUNTRY3))
-                                                        .withOutboundLeg(buildOutBoundLeg(DESTINATION2, AIRPORT_CODE2, COUNTRY2)))
+                                                        .withInboundLeg(buildInBoundLeg(DESTINATION2, AIRPORT_CODE3, COUNTRY3, COUNTRY_CODE3))
+                                                        .withOutboundLeg(buildOutBoundLeg(DESTINATION2, AIRPORT_CODE2, COUNTRY2, COUNTRY_CODE2)))
                                                     .build();
     // @formatter:on
     final SkyscannerCheapestQuotesResponse actual = transformer.transform(skyscannerResponse);
@@ -65,15 +68,17 @@ public class CheapestQuotesResponseTransformerTest {
 
 
   private LegBuilder buildOutBoundLeg(final String destination, final String airportCode,
-      final String country) throws ParseException {
+      final String country, final String countryCode) throws ParseException {
     return aLeg().withCarrier(CARRIER).withOrigin(ORIGIN).withDestination(destination)
-        .withAirportCode(airportCode).withCountry(country).withDepartureDate(OUT_BOUND_DATE);
+        .withAirportCode(airportCode).withCountry(country).withCountryCode(countryCode)
+        .withDepartureDate(OUT_BOUND_DATE);
   }
 
   private LegBuilder buildInBoundLeg(final String destination, final String airportCode,
-      final String country) throws ParseException {
+      final String country, final String countryCode) throws ParseException {
     return aLeg().withCarrier(CARRIER).withOrigin(destination).withDestination(ORIGIN)
-        .withAirportCode(airportCode).withCountry(country).withDepartureDate(IN_BOUND_DATE);
+        .withAirportCode(airportCode).withCountry(country).withCountryCode(countryCode)
+        .withDepartureDate(IN_BOUND_DATE);
   }
 
   private BrowseQuotesResponseAPIDto createBrowseQuotesResponseAPIDto() {
@@ -144,8 +149,24 @@ public class CheapestQuotesResponseTransformerTest {
                                       .withName("London Gatwick")
                                       .withPlaceId(65655)
                                       .withSkyscannerCode("LGW")
-                                      .withType("Station"))                  
-                    .withCurrencies(aCurrencyDto()
+                                      .withType("Station"),
+                                aPlaceDto()
+                                      .withName("Greece")
+                                      .withSkyscannerCode("GR")
+                                      .withType("Country"),
+                                aPlaceDto()
+                                      .withName("Spain")
+                                      .withSkyscannerCode("ES")
+                                      .withType("Country"),
+                                aPlaceDto()
+                                      .withName("France")
+                                      .withSkyscannerCode("FR")
+                                      .withType("Country"),                                      
+                                aPlaceDto()
+                                      .withName("United Kingdom")
+                                      .withSkyscannerCode("UK")
+                                      .withType("Country"))                   
+                          .withCurrencies(aCurrencyDto()
                                       .withCode("GBP")
                                       .withDecimalDigits(2)
                                       .withDecimalSeparator(".")

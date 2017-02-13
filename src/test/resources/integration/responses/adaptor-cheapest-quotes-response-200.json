@@ -9,6 +9,7 @@
         "origin": "Athens",
         "destination": "Madrid",
         "country": "Spain",
+        "countryCode": "ES",        
         "airportCode": "MAD",        
         "departureDate": "2016-10-10T00:00:00"
       },
@@ -17,6 +18,7 @@
         "origin": "Madrid",
         "destination": "Athens",
         "country": "Greece",
+        "countryCode": "GR",        
         "airportCode": "ATH",        
         "departureDate": "2016-10-20T00:00:00"
       }
@@ -30,6 +32,7 @@
         "origin": "Athens",
         "destination": "Paris",
         "country": "France",
+        "countryCode": "FR",        
         "airportCode": "CDG",        
         "departureDate": "2016-10-10T00:00:00"
       },
@@ -38,6 +41,7 @@
         "origin": "Paris",
         "destination": "Athens",
         "country": "Greece",
+        "countryCode": "GR",        
         "airportCode": "ATH",        
         "departureDate": "2016-10-20T00:00:00"
       }

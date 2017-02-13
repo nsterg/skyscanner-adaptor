@@ -75,7 +75,26 @@
       "CityName": "Paris",
       "CityId": "PARI",
       "CountryName": "France"
+    },
+    {
+      "PlaceId": 111,
+      "Name": "France",
+      "Type": "Country",
+      "SkyscannerCode": "FR"
+    },
+    {
+      "PlaceId": 222,
+      "Name": "Greece",
+      "Type": "Country",
+      "SkyscannerCode": "GR"
+    },
+    {
+      "PlaceId": 333,
+      "Name": "Spain",
+      "Type": "Country",
+      "SkyscannerCode": "ES"
     }
+    
   ],
   "Carriers": [
     {
