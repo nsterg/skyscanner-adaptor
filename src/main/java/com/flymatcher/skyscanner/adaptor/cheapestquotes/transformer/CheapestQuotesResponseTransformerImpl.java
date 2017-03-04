@@ -63,8 +63,9 @@ public class CheapestQuotesResponseTransformerImpl implements CheapestQuotesResp
     final List<PlaceDto> places = response.getPlaces();
 
     leg.setOrigin(placeLookUp(places, inoutLeg.getOriginId()));
+    leg.setOriginCode(airportLookUp(places, inoutLeg.getOriginId()));
     leg.setDestination(placeLookUp(places, inoutLeg.getDestinationId()));
-    leg.setAirportCode(airportLookUp(places, inoutLeg.getDestinationId()));
+    leg.setDestinationCode(airportLookUp(places, inoutLeg.getDestinationId()));
 
     final String country = countryLookUp(places, inoutLeg.getDestinationId());
     leg.setCountry(country);
